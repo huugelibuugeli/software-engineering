@@ -1,0 +1,26 @@
+name: Example Workflow
+
+on: 
+  workflow_dispatch:
+  push:
+    branches: ['main','feature-*']
+
+jobs:
+  unit_testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get files
+        uses: actions/checkout@v2
+      - name: Preparation
+        run: |
+          pwd
+          echo $ ls -la
+          ls -la
+          pip install pytest
+      - name: Check Parser
+        run: |
+          echo cd parser
+          cd parser
+          echo pytest parser.py
+          pytest parser.py
+

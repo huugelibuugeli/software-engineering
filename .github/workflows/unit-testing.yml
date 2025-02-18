@@ -1,0 +1,45 @@
+name: Unit testing
+
+on:
+  push:
+    branches: [ 'main', 'feature-*' ]
+  workflow_dispatch:
+
+jobs:
+  unit_testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v2
+      - name: Check out files
+        run: |
+          echo "$ echo ""Hello"""
+          echo "Hello"
+          echo $ ls -la 
+          ls -la 
+          echo $ pwd
+          pwd
+      - name: Install pytest
+        run: |
+          echo "$ pip install pytest"
+          pip install pytest
+          echo "$ pytest --version"
+          pytest --version
+      - name: Test calc library
+        run: |
+          echo "$ pytest test_calc.py"
+          pytest test_calc.py
+      - name: Verify node installation
+        run: |
+          echo "$ node --version"
+          node --version
+      - name: Test parser library
+        run: |
+          echo $ cd tdd-example
+          cd tdd-example
+          echo $ node parser.js        
+          node parser.js
+          
+
+
+

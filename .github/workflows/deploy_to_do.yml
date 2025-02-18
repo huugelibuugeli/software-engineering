@@ -1,0 +1,43 @@
+name: Deploy to Digital Ocean / diagonal.cortana.org
+
+on:
+  push:
+    branches: [ 'production' ]
+  workflow_dispatch:
+
+env:
+  HOST: diagonal.cortana.org
+  USER: root
+  TARGET: root@diagonal.cortana.org
+  RUN: ssh -o LogLevel=ERROR -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@diagonal.cortana.org
+  COPY: scp -o LogLevel=ERROR -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+
+jobs:
+  deploy_to_server:
+    runs-on: ubuntu-latest
+    steps:          
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.ID_RSA }}
+          name: id_rsa
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
+      - name: Get the repo code
+        uses: actions/checkout@v2
+        with: 
+          repository: gregdelozier/diagonal
+
+      - name: Ping the server
+        run: |
+          $RUN 'ls -la'
+          echo "hello" >hello.txt
+          $COPY hello.txt $TARGET:/tmp
+          
+      - name: Copy code to server
+        run: |
+          $COPY index.html $TARGET:/root/web
+          $COPY sketch.js $TARGET:/root/web
+          $COPY style.css $TARGET:/root/web
+          $RUN 'ls -la /root/web'
+
